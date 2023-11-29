@@ -1,11 +1,17 @@
 import numpy as np
 import cv2
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
-from keras.layers import Conv2D
-from keras.layers import MaxPooling2D
+from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 import os
+import time
+import pymongo
+from pymongo import MongoClient
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
+# MongoDB setup
+client = MongoClient('localhost', 27017)
+db = client.emotion_db
+collection = db.emotion_records
 
 # Create the model
 model = Sequential()
@@ -38,14 +44,19 @@ emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutra
 
 # start the webcam feed
 cap = cv2.VideoCapture(0)
+
+# Variables for timing and result storage
+last_saved_time = time.time()
+saved_results = []
+
 while True:
-    # Find haar cascade to draw bounding box around face
     ret, frame = cap.read()
     if not ret:
         break
+
     facecasc = cv2.CascadeClassifier('machine-learning-client/haarcascade_frontalface_alt.xml')
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    faces = facecasc.detectMultiScale(gray,scaleFactor=1.3, minNeighbors=5)
+    faces = facecasc.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
 
     for (x, y, w, h) in faces:
         cv2.rectangle(frame, (x, y-50), (x+w, y+h+10), (255, 0, 0), 2)
@@ -55,9 +66,23 @@ while True:
         maxindex = int(np.argmax(prediction))
         cv2.putText(frame, emotion_dict[maxindex], (x+20, y-60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
-    cv2.imshow('Video', cv2.resize(frame,(1600,960),interpolation = cv2.INTER_CUBIC))
+    current_time = time.time()
+    if current_time - last_saved_time >= 10:
+        if faces:
+            last_emotion = emotion_dict[maxindex]
+            saved_results.append(last_emotion)
+            if len(saved_results) > 5:
+                saved_results.pop(0)
+
+            collection.insert_one({"timestamp": current_time, "emotion": last_emotion})
+
+        last_saved_time = current_time
+
+    cv2.imshow('Video', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
 cap.release()
 cv2.destroyAllWindows()
+
+print("Saved Emotions:", saved_results)
