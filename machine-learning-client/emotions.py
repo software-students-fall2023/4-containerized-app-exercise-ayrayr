@@ -11,22 +11,26 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 load_dotenv()  # take environment variables from .env.
 
-cxn = MongoClient(os.getenv('MONGO_URI'))
-try:
-    db = cxn[os.getenv('MONGO_DBNAME')] # store a reference to the database
-    print(' *', 'Connected to MongoDB!') # if we get here, the connection worked!
-    collection = db[os.getenv("MONGO_COLLECTION")]
-    print(' *', 'Connected to collection!')
-except Exception as e:
-    # the ping command failed, so the connection is not available.
-    print(' *', "Failed to connect to MongoDB at", os.getenv('MONGO_URI'))
-    print('Database connection error:', e) # debug
+# cxn = MongoClient(os.getenv('MONGO_URI'))
+# try:
+#     db = cxn[os.getenv('MONGO_DBNAME')] # store a reference to the database
+#     print(' *', 'Connected to MongoDB!') # if we get here, the connection worked!
+#     collection = db[os.getenv("MONGO_COLLECTION")]
+#     print(' *', 'Connected to collection!')
+# except Exception as e:
+#     # the ping command failed, so the connection is not available.
+#     print(' *', "Failed to connect to MongoDB at", os.getenv('MONGO_URI'))
+#     print('Database connection error:', e) # debug
 
 
 # MongoDB setup
 # client = MongoClient(os.getenv("MONGO_URI"))
 # db = client[os.getenv("MONGO_DBNAME")]
 # collection = db[os.getenv("MONGO_COLLECTION")]
+
+client = MongoClient("mongodb", "27017")
+db = client["emotion_db"]
+collection = db["emotion_records"]
 
 # Create the model
 model = Sequential()
