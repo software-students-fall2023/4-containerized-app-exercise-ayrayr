@@ -28,7 +28,7 @@ load_dotenv()  # take environment variables from .env.
 # db = client[os.getenv("MONGO_DBNAME")]
 # collection = db[os.getenv("MONGO_COLLECTION")]
 
-client = MongoClient("mongodb", "27017")
+client = MongoClient("mongodb", 27017)
 db = client["emotion_db"]
 collection = db["emotion_records"]
 
@@ -98,7 +98,11 @@ def detect_face():
         if (cur_time_saved-last_time_saved >= 10):
             if faces.__len__()!=0:
                 saved_results.append(emotion_dict[maxindex])
-                collection.insert_one({"timestamp": time.ctime(), "emotion": emotion_dict[maxindex]}) #timestamp": time.ctime(), 
+                try:
+                    db.collection.insert_one({"timestamp": time.ctime(), "emotion": emotion_dict[maxindex]})  
+                except Exception as e:
+                    print(f"Exception during insert_one: {e}")
+                print("emotion inserted to collection!")
                 last_time_saved = cur_time_saved
 
         cv2.imshow('Video', frame)
