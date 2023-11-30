@@ -4,7 +4,7 @@ services:
     build: ./mongodb
     container_name: mongodb
     ports:
-      - "27017:27017"
+      - "localhost:27017"
 
   ml_client:
     build: ./ml_client
