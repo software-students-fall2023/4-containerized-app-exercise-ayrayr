@@ -11,16 +11,15 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 load_dotenv()  # take environment variables from .env.
 
-# cxn = MongoClient(os.getenv('MONGO_URI'))
-# try:
-#     db = cxn[os.getenv('MONGO_DBNAME')] # store a reference to the database
-#     print(' *', 'Connected to MongoDB!') # if we get here, the connection worked!
-#     collection = db[os.getenv("MONGO_COLLECTION")]
-#     print(' *', 'Connected to collection!')
-# except Exception as e:
-#     # the ping command failed, so the connection is not available.
-#     print(' *', "Failed to connect to MongoDB at", os.getenv('MONGO_URI'))
-#     print('Database connection error:', e) # debug
+cxn = MongoClient(os.getenv('MONGO_URI'))
+try:
+    db = cxn[os.getenv('MONGO_DBNAME')] # store a reference to the database
+    print(' *', 'Connected to MongoDB!') # if we get here, the connection worked!
+    collection = db[os.getenv("MONGO_COLLECTION")]
+except Exception as e:
+    # the ping command failed, so the connection is not available.
+    print(' *', "Failed to connect to MongoDB at", os.getenv('MONGO_URI'))
+    print('Database connection error:', e) # debug
 
 
 # MongoDB setup
@@ -28,9 +27,9 @@ load_dotenv()  # take environment variables from .env.
 # db = client[os.getenv("MONGO_DBNAME")]
 # collection = db[os.getenv("MONGO_COLLECTION")]
 
-client = MongoClient("mongodb", 27017)
-db = client["emotion_db"]
-collection = db["emotion_records"]
+# client = MongoClient("localhost", 27017)
+# db = client["emotion_db"]
+# collection = db["records"]
 
 # Create the model
 model = Sequential()
@@ -99,7 +98,7 @@ def detect_face():
             if faces.__len__()!=0:
                 saved_results.append(emotion_dict[maxindex])
                 try:
-                    db.collection.insert_one({"timestamp": time.ctime(), "emotion": emotion_dict[maxindex]})  
+                    collection.insert_one({"timestamp": time.ctime(), "emotion": emotion_dict[maxindex]})  
                 except Exception as e:
                     print(f"Exception during insert_one: {e}")
                 print("emotion inserted to collection!")
