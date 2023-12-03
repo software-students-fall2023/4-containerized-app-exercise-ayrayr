@@ -1,17 +1,17 @@
 version: '3'
 services:
   mongodb:
-    build: ./mongodb
-    container_name: mongodb
+    image: mongo
+    container_name: my_mongodb
     ports:
-      - "localhost:27017"
+      - "27017:27017"
 
   ml_client:
-    build: ./ml_client
+    build: ./machine-learning-client
     ports:
       - "5001:5001"
     environment:
-      - MONGO_URI=mongodb://localhost:27017
+      - MONGO_URI=mongodb://27017:27017
       - MONGO_DBNAME=emotion_db
       - MONGODB_COLLECTION=emotion_records
     depends_on:
@@ -22,7 +22,7 @@ services:
     ports:
       - "5002:5002"
     environment:
-      - MONGO_URI=mongodb://localhost:27017
+      - MONGO_URI=mongodb://27017:27017
       - MONGO_DBNAME=emotion_db
       - MONGODB_COLLECTION=emotion_records
     depends_on:

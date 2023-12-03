@@ -1,0 +1,14 @@
+{% extends 'base.html' %} 
+
+{% block container %}
+    <title>Real Time Emotion Detection</title>
+    </head>
+    <body></body>
+        <div class="container">
+            <div class="row">
+                <h3 class="mt-5"><font color="white" style="font-family:verdana;" style="font-size:300%;"> Real Time Emotion Detection</font></h3>
+                <img src="{{ url_for('video_feed') }}" width="100%">
+            </div>
+        </div>
+    </body>
+{% endblock %}

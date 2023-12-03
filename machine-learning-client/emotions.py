@@ -7,9 +7,14 @@ import cv2
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 from pymongo import MongoClient
+from flask import Flask, render_template, Response
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 load_dotenv()  # take environment variables from .env.
+
+# instantiate app
+app = Flask(__name__)
 
 cxn = MongoClient(os.getenv('MONGO_URI'))
 try:
@@ -20,7 +25,6 @@ except Exception as e:
     # the ping command failed, so the connection is not available.
     print(' *', "Failed to connect to MongoDB at", os.getenv('MONGO_URI'))
     print('Database connection error:', e) # debug
-
 
 # MongoDB setup
 # client = MongoClient(os.getenv("MONGO_URI"))
@@ -62,8 +66,11 @@ emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutra
 # start the webcam feed
 cap = cv2.VideoCapture(0)
 
-# Variables for timing and result storage
-saved_results = []
+# instantiate 
+app = Flask(__name__)
+
+# # Variables for and result storage
+# saved_results = []
 
 def detect_face():
     last_time_saved = time.time()
@@ -86,17 +93,9 @@ def detect_face():
             maxindex = int(np.argmax(prediction))
             cv2.putText(frame, emotion_dict[maxindex], (x+20, y-60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
-        # current_time = time.time()
-        # if current_time - last_saved_time >= 10:
-        #     if faces:
-        #         last_emotion = emotion_dict[maxindex]
-        #         saved_results.append(last_emotion)
-        #         if len(saved_results) > 5:
-        #             saved_results.pop(0)
-
         if (cur_time_saved-last_time_saved >= 10):
             if faces.__len__()!=0:
-                saved_results.append(emotion_dict[maxindex])
+                # saved_results.append(emotion_dict[maxindex])
                 try:
                     collection.insert_one({"timestamp": time.ctime(), "emotion": emotion_dict[maxindex]})  
                 except Exception as e:
@@ -104,13 +103,18 @@ def detect_face():
                 print("emotion inserted to collection!")
                 last_time_saved = cur_time_saved
 
-        cv2.imshow('Video', frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        resized_img = cv2.resize(frame, (1000, 700))  
+
+        ret, buffer = cv2.imencode('.jpg', frame)
+
+        frame_byte = buffer.tobytes()
+
+        yield(b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame_byte + b'\r\n')
     
-    cap.release()
-    cv2.destroyAllWindows()
-    print(saved_results)
+@app.route('/video_feed')
+def video_feed():
+    return Response(detect_face(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
 
 if __name__ == "__main__":
     detect_face()
