@@ -7,6 +7,8 @@ Our project involves real-time emotion detection from a webcam feed using a pre-
 
 ![Lint](https://github.com/software-students-fall2023/4-containerized-app-exercise-ayrayr/actions/workflows/lint.yml/badge.svg)
 
+![Ml_workflow](https://github.com/software-students-fall2023/4-containerized-app-exercise-ayrayr/actions/workflows/ml_workflow/badge.svg)
+
 
 ## Group Members
 - [Alex Xiang](https://github.com/AlexXiang604)
