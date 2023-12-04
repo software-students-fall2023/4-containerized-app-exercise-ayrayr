@@ -1,3 +1,4 @@
+"""Web App"""
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from dotenv import load_dotenv
 import os
@@ -12,22 +13,31 @@ app = Flask(__name__)
 
 load_dotenv()  # take environment variables from .env.
 
-# cxn = pymongo.MongoClient(os.getenv('MONGO_URI'))
-# try:
-#     db = cxn[os.getenv('MONGO_DBNAME')] # store a reference to the database
-#     print(' *', 'Connected to MongoDB!') # if we get here, the connection worked!
-#     collection = db[os.getenv("MONGO_COLLECTION")]
-# except Exception as e:
-#     # the ping command failed, so the connection is not available.
-#     print(' *', "Failed to connect to MongoDB at", os.getenv('MONGO_URI'))
-#     print('Database connection error:', e) # debug
+def initialize_database():
+    """
+    Initializes the database connection and returns the db object
+    """
+    cxn = MongoClient(os.getenv('MONGO_URI'), serverSelectionTimeoutMS=5000)
+    try:
+        db = cxn[os.getenv('MONGO_DBNAME')] # store a reference to the database
+        print(' *', 'Connected to MongoDB!') # if we get here, the connection worked!
+        return db
+    except Exception as e:
+        # the ping command failed, so the connection is not available.
+        print(' *', "Failed to connect to MongoDB at", os.getenv('MONGO_URI'))
+        print('Database connection error:', e) # debug
+    return None
+
+db = initialize_database()
 
 @app.route("/")
 def index():
     """
     the main page of the web app
     """
-    return render_template("index.html")
+    docs = db.records.find({}).sort("timestamp", -1).limit(5)
+    print(docs)
+    return render_template("index.html", docs=docs)
 
 @app.route("/start_cam_feed")
 def start_cam_feed():

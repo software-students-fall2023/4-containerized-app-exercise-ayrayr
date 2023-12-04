@@ -1,3 +1,4 @@
+"""Machine Learning Client"""
 # import packages for ml-client
 import os
 import time
@@ -39,7 +40,9 @@ def initialize_database():
 
 # Create the emotion detection model
 def get_model(weight_h5= "machine-learning-client/model.h5"):
-    
+    """
+    Create emotion recognition model and load weight
+    """
     model = Sequential()
 
     model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(48,48,1)))
