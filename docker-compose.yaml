@@ -16,8 +16,6 @@ services:
       - MONGODB_COLLECTION=records
     depends_on:
       - mongodb
-    devices:
-      - /dev/video0:/dev/video0
 
   web-app:
     build: ./web-app
@@ -29,5 +27,3 @@ services:
       - MONGODB_COLLECTION=records
     depends_on:
       - mongodb
-    devices:
-      - /dev/video0:/dev/video0
