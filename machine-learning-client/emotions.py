@@ -39,7 +39,7 @@ def initialize_database():
 # collection = db["records"]
 
 # Create the emotion detection model
-def get_model(weight_h5= "machine-learning-client/model.h5"):
+def get_model(weight_h5= "model.h5"):
     """
     Create emotion recognition model and load weight
     """
@@ -73,7 +73,7 @@ def detect_face(frame, model, db, emotion_dict={0: "Angry", 1: "Disgusted", 2: "
     """
     The function that detect faces and emotions. Stores emotion into database.
     """
-    facecasc = cv2.CascadeClassifier('machine-learning-client/haarcascade_frontalface_alt.xml')
+    facecasc = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = facecasc.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
 
