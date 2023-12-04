@@ -7,9 +7,10 @@ Our project involves real-time emotion detection from a webcam feed using a pre-
 
 
 ## Group Members
+- [Alex Xiang](https://github.com/AlexXiang604)
 - [Richard Fu](https://github.com/RichardFuuu)
 - [Yimeng Duan](https://github.com/YimengDuan2002)
-- [Alex Xiang](https://github.com/AlexXiang604)
+
 
 ## Run the 
 ## Instructions to import 
