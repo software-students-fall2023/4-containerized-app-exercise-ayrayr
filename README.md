@@ -8,11 +8,20 @@ Our project involves real-time emotion detection from a webcam feed using a pre-
 ![Lint](https://github.com/software-students-fall2023/4-containerized-app-exercise-ayrayr/actions/workflows/lint.yml/badge.svg)
 
 
+
+
 ## Group Members
 - [Alex Xiang](https://github.com/AlexXiang604)
 - [Richard Fu](https://github.com/RichardFuuu)
 - [Yimeng Duan](https://github.com/YimengDuan2002)
 
 
-## Run the 
-## Instructions to import 
+## Run the project
+Open a terminal and navigate to the directory containing your project files and the docker-compose.yaml. Run the following command:
+
+```
+docker-compose up --build
+```
+
+
+
