@@ -1,0 +1,7 @@
+flask
+pymongo
+numpy==1.23.5
+blinker==1.4
+flatbuffers==2.0
+h5py==3.7.0
+python-dotenv==1.0.0
