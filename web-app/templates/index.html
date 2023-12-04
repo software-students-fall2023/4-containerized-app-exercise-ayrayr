@@ -1,0 +1,32 @@
+{% extends 'base.html' %} 
+
+{% block container %}
+    <title>Real Time Emotion Detection</title>
+    </head>
+    <body>
+        <div class="container">
+            <a href="/start_cam_feed">
+                <button>Start Detecting</button>
+            </a>
+            
+            <table id="live-table">
+                <tr>
+                    <th>Emotion</th>
+                    <th>Timestamp</th>
+                </tr>
+
+                {% for doc in docs %}
+                <tr>
+                    <td>{{doc.time}}</td>
+                    <td>{{doc.result}}</td>
+                </tr>
+                {%endfor%}
+
+            </table>
+
+            <a href="/">
+                <button>Refresh the table</button>
+            </a>
+        </div>
+    </body>
+{% endblock %}
