@@ -1,0 +1,49 @@
+# This workflow will upload a Python Package using Twine when a release is created
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: work flow of machine learning client 
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+
+   - name: Install Dependencies
+        run: |
+          pip install -r machine-learning-client/requirements.txt
+        working-directory: ml-client-directory
+
+    - name: Test with pytest
+      run: |
+        pipenv run python -m pytest
+
+   - name: Build ML Client
+        run: |
+          # Add commands to build your machine learning client
+          python emotions.py
+        working-directory: machine-learning-client
