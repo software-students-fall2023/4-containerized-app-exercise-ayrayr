@@ -7,7 +7,7 @@ import cv2
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 from pymongo import MongoClient
-import certifi
+# import certifi
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -17,7 +17,7 @@ def initialize_database():
     """
     Initializes the database connection and returns the db object
     """
-    cxn = MongoClient(os.getenv('MONGO_URI'), serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where())
+    cxn = MongoClient(os.getenv('MONGO_URI'), serverSelectionTimeoutMS=5000)
     try:
         db = cxn[os.getenv('MONGO_DBNAME')] # store a reference to the database
         print(' *', 'Connected to MongoDB!') # if we get here, the connection worked!
@@ -38,7 +38,7 @@ def initialize_database():
 # collection = db["records"]
 
 # Create the emotion detection model
-def get_model(weight_h5= "model.h5"):
+def get_model(weight_h5= "machine-learning-client/model.h5"):
     
     model = Sequential()
 
@@ -70,7 +70,7 @@ def detect_face(frame, model, db, emotion_dict={0: "Angry", 1: "Disgusted", 2: "
     """
     The function that detect faces and emotions. Stores emotion into database.
     """
-    facecasc = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
+    facecasc = cv2.CascadeClassifier('machine-learning-client/haarcascade_frontalface_alt.xml')
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = facecasc.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
 

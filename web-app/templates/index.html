@@ -8,6 +8,21 @@
             <a href="/start_cam_feed">
                 <button>Start Detecting</button>
             </a>
+            
+            <table id="live-table">
+                <tr>
+                    <th>Emotion</th>
+                    <th>Timestamp</th>
+                </tr>
+
+                {% for doc in docs %}
+                <tr>
+                    <td>{{doc.time}}</td>
+                    <td>{{doc.result}}</td>
+                </tr>
+                {%endfor%}
+
+            </table>
         </div>
     </body>
 {% endblock %}
