@@ -25,4 +25,3 @@ docker-compose up --build
 
 
 
-## Instructions to import 
