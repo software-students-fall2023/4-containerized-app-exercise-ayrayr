@@ -11,19 +11,23 @@ services:
     ports:
       - "5001:5001"
     environment:
-      - MONGO_URI=mongodb://27017:27017
+      - MONGO_URI=mongodb://mongodb:27017
       - MONGO_DBNAME=emotion_db
-      - MONGODB_COLLECTION=emotion_records
+      - MONGODB_COLLECTION=records
     depends_on:
       - mongodb
+    devices:
+      - /dev/video0:/dev/video0
 
   web-app:
     build: ./web-app
     ports:
       - "5002:5002"
     environment:
-      - MONGO_URI=mongodb://27017:27017
+      - MONGO_URI=mongodb://mongodb:27017
       - MONGO_DBNAME=emotion_db
-      - MONGODB_COLLECTION=emotion_records
+      - MONGODB_COLLECTION=records
     depends_on:
       - mongodb
+    devices:
+      - /dev/video0:/dev/video0

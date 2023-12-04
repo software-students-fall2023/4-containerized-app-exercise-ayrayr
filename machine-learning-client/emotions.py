@@ -38,7 +38,7 @@ def initialize_database():
 # collection = db["records"]
 
 # Create the emotion detection model
-def get_model(weight_h5= "machine-learning-client/model.h5"):
+def get_model(weight_h5= "model.h5"):
     
     model = Sequential()
 
@@ -70,7 +70,7 @@ def detect_face(frame, model, db, emotion_dict={0: "Angry", 1: "Disgusted", 2: "
     """
     The function that detect faces and emotions. Stores emotion into database.
     """
-    facecasc = cv2.CascadeClassifier('machine-learning-client/haarcascade_frontalface_alt.xml')
+    facecasc = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = facecasc.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
 
@@ -82,13 +82,13 @@ def detect_face(frame, model, db, emotion_dict={0: "Angry", 1: "Disgusted", 2: "
         maxindex = int(np.argmax(prediction))
         cv2.putText(frame, emotion_dict[maxindex], (x+20, y-60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
-    # if (db is not None):
-    #     if faces.__len__()!=0:
-    #         try:
-    #             db.records.insert_one({"timestamp": time.ctime(), "emotion": emotion_dict[maxindex]})  
-    #             print("emotion inserted to collection!")
-    #         except Exception as e:
-    #             print(f"Exception during insert_one: {e}")
+    if (db is not None):
+        if faces.__len__()!=0:
+            try:
+                db.records.insert_one({"timestamp": time.ctime(), "emotion": emotion_dict[maxindex]})  
+                print("emotion inserted to collection!")
+            except Exception as e:
+                print(f"Exception during insert_one: {e}")
 
     return frame
     
