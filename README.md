@@ -4,6 +4,7 @@ Our project involves real-time emotion detection from a webcam feed using a pre-
 
 ## Work Flows 
 ![ML Client build & test](https://github.com/software-students-fall2023/4-containerized-app-exercise-ayrayr/actions/workflows/event-logger.yml/badge.svg)
+![ML Client build & test](https://github.com/software-students-fall2023/4-containerized-app-exercise-ayrayr/actions/workflows/lint.yml/badge.svg)
 
 
 ## Group Members
