@@ -3,12 +3,26 @@
 {% block container %}
     <title>Real Time Emotion Detection</title>
     </head>
-    <body></body>
+    <body>
         <div class="container">
-            <div class="row">
-                <h3 class="mt-5"><font color="white" style="font-family:verdana;" style="font-size:300%;"> Real Time Emotion Detection</font></h3>
-                <img src="{{ url_for('video_feed') }}" width="100%">
-            </div>
+            <a href="/start_cam_feed">
+                <button>Start Detecting</button>
+            </a>
+            
+            <table id="live-table">
+                <tr>
+                    <th>Emotion</th>
+                    <th>Timestamp</th>
+                </tr>
+
+                {% for doc in docs %}
+                <tr>
+                    <td>{{doc.time}}</td>
+                    <td>{{doc.result}}</td>
+                </tr>
+                {%endfor%}
+
+            </table>
         </div>
     </body>
 {% endblock %}
