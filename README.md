@@ -16,6 +16,7 @@ Our project involves real-time emotion detection from a webcam feed using a pre-
 
 ## Run the project
 Open a terminal and navigate to the directory containing your project files and the docker-compose.yaml. Run the following command:
+
 ```
 docker-compose up --build
 ```
